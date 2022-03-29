@@ -13,10 +13,7 @@ export class Order {
   id: number;
 
   @Column()
-  firstName: string;
-
-  @Column()
-  lastName: string;
+  userName: string;
 
   @Column()
   email: string;
