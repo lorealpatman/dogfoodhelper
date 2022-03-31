@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { User } from '../entities/User';
+import { User } from '../entity/User';
 import bcryptjs from 'bcryptjs';
 import { RegisterValidation } from '../validation/register.validation';
 import { sign, verify } from 'jsonwebtoken';
