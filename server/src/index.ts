@@ -1,33 +1,26 @@
-import { createConnection } from 'typeorm';
-import express, { application } from 'express';
-import dotenv from 'dotenv';
+import { AppDataSource } from './data-source';
 
-dotenv.config();
-const app = express();
+import express from 'express';
+import cors from 'cors';
+import { routes } from './routes';
+import cookieParser from 'cookie-parser';
 
-const main = async () => {
-  try {
-    await createConnection({
-      type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: process.env.PG_DB_PASSWORD,
-      database: 'dogfoodhelper',
-      entities: ['src/entity/*.ts'],
-      synchronize: true,
-    });
-    console.log('Connected to Postgres');
-
+AppDataSource.initialize()
+  .then(async () => {
+    const app = express();
     app.use(express.json());
+    app.use(cookieParser());
+    app.use(
+      cors({
+        credentials: true, //front end gets access to cookie for port
+        origin: ['http://localhost:3000'],
+      })
+    );
+
+    routes(app);
 
     app.listen(8000, () => {
       console.log('Running on port 8000');
     });
-  } catch (error) {
-    console.error(error);
-    throw new Error('Unable to connect to database');
-  }
-};
-
-main();
+  })
+  .catch((error) => console.log(error));
