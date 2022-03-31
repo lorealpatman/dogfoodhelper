@@ -2,10 +2,13 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { OrderItem } from './Order-Item';
+import { User } from '../entity/User';
 
 @Entity()
 export class Order {
@@ -21,12 +24,12 @@ export class Order {
   @CreateDateColumn()
   created_at: string;
 
+  @OneToOne(() => User, (user) => user.order)
+  @JoinColumn()
+  user: User;
+
   @OneToMany(() => OrderItem, (orderItem) => orderItem.order)
   orderItems: OrderItem[];
-
-  get name(): string {
-    return `${this.name}`;
-  }
 
   get total(): number {
     return this.orderItems.reduce(

@@ -21,6 +21,9 @@ export class OrderItem {
   @Column()
   quantity: number;
 
+  @Column()
+  image: string;
+
   @ManyToOne(() => Order)
   @JoinColumn({ name: 'order_id' })
   order: Order;
